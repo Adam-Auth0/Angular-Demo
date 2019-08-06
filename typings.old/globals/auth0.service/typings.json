@@ -1,0 +1,8 @@
+{
+  "resolution": "main",
+  "tree": {
+    "src": "/Users/adame/angular/02-calling-an-api/typings/source/auth0.service.d.ts",
+    "raw": "file:./typings/source/auth0.service.d.ts",
+    "typings": "/Users/adame/angular/02-calling-an-api/typings/source/auth0.service.d.ts"
+  }
+}

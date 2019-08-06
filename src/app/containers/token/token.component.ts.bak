@@ -1,0 +1,65 @@
+import { Component, OnInit } from '@angular/core';
+import { JwtHelperService } from '@auth0/angular-jwt';
+import { AuthService } from '../../auth/auth.service';
+import { AccessTokenClaims } from './accesstokenclaims';
+
+@Component({
+    selector: 'app-profile',
+    templateUrl: './token.component.html',
+    styleUrls: ['./token.component.css']
+})
+export class TokenComponent implements OnInit {
+    public show = false;
+    public buttonName: any = 'Show';
+    token: any;
+    tokenClaims: AccessTokenClaims;
+    tokenJson: any;
+    profile: any;
+    profileJson: string;
+    headElements = ['Claim', 'Value'];
+
+    constructor(private authService: AuthService) { }
+
+    async ngOnInit(): Promise<any> {
+        const client = await this.authService.getAuth0Client();
+        const token = await client.getTokenSilently();
+        const jwtHelper = new JwtHelperService();
+
+        if (token) {
+            this.token = token;
+            this.tokenClaims = jwtHelper.decodeToken(token);
+            this.tokenJson = JSON.stringify(jwtHelper.decodeToken(token), null, 2);
+        }
+
+        this.authService.profile.subscribe(profile => {
+            if (profile) {
+                this.profile = profile;
+                this.profileJson = JSON.stringify(this.profile, null, 2);
+            }
+        });
+
+        // console.log(this.token);
+        // console.log(this.profile);
+
+        if (this.token && this.profile) {
+            return;
+        }
+
+
+        this.token = null;
+        this.tokenJson = null;
+        this.profile = null;
+        this.profileJson = null;
+    }
+
+    toggle() {
+        this.show = !this.show;
+
+        // CHANGE THE NAME OF THE BUTTON.
+        if (this.show) {
+            this.buttonName = 'Hide JSON';
+        } else {
+            this.buttonName = 'Show JSON';
+        }
+    }
+}

@@ -1,0 +1,93 @@
+/* You can add global styles to this file, and also import other style files */
+/*@import "../node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css";*/
+
+.result-block-container {
+  min-height: 300px;
+  position: relative;
+}
+
+.result-block-container .result-block {
+  opacity: 0;
+}
+
+.result-block-container .result-block.show {
+  opacity: 1;
+}
+
+.jwt {
+  font-family: monospace;
+  overflow-wrap: break-word;
+  margin-left: -15%;
+  margin-right: 15%;
+}
+
+.jwt-header {
+  color: #fb015b;
+}
+
+.jwt-dot {
+  color: #000;
+}
+
+.jwt-payload {
+  color: #d63aff;
+}
+
+.jwt-signature {
+  color: #00b9f1;
+}
+
+.jwt-box {
+  display: block;
+  padding: 9.5px;
+  margin: 0 0 10px;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-left: 2%;
+  margin-right: 2%;
+  width: 100%;
+}
+
+.border-box {
+  display: block;
+  padding: 9.5px;
+  margin: 0 0 10px;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-left: 2%;
+  margin-right: 2%;
+  width: 100%;
+}
+
+.usrinput-box {
+  display: block;
+  padding: 9.5px;
+  margin: 0 0 10px;
+  margin-right: 2%;
+  margin-left: 2%;
+  width: 100%;
+}
+.mainbtn {
+  font-size: 0.8em;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  background-color: #f5f5f5;
+  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+  transition-property: color, background-color, border-color, box-shadow;
+  transition-duration: 0.15s, 0.15s, 0.15s, 0.15s;
+  transition-timing-function: ease-in-out, ease-in-out, ease-in-out, ease-in-out;
+  transition-delay: 0s, 0s, 0s, 0s;
+}
+
+.mainbtn:hover {
+  font-size: 0.8em;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  border-color: #0062cc;
+  color: #fff;
+  background-color: #0069d9;
+}
