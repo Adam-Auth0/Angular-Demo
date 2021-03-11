@@ -1,0 +1,6 @@
+{
+  "clientId": "pMSPshYXPfz61SyLBrh4n1c9yoaCkanM",
+  "passwordlessClientId": "c1P1EjaAk6IuHkpCEhDyrpv03CWsYTex",
+  "domain": "orgs-beta-liveperson.us.auth0.com",
+  "audience": "https://orgs-beta-liveperson.us.auth0.com/api/v2/"
+}

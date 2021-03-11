@@ -1,0 +1,11 @@
+<div class="next-steps my-5">
+  <h2 class="my-5 text-center">Password Change Landing Page</h2>
+  <ng-template [ngIf]="wellformed" [ngIfElse]="badredirect">
+    <h5 class="my5 text-center" *ngIf="success === 'true'">Password for {{ email }} has been successfully changed.</h5>
+    <h5 class="my5 text-center" *ngIf="success === 'false'">There was a problem changing the password for {{ email }}.</h5>
+    <h5 class="my5 text-center">{{ message }}</h5>
+  </ng-template>
+  <ng-template #badredirect>
+    <h5 class="my5 text-center">OOPS! Looks like you have arrived here by mistake.</h5>
+  </ng-template>
+</div>

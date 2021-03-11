@@ -1,0 +1,20 @@
+<div class="container mt-5" *ngIf="!idToken">
+  <div class="row">
+    <div class="border-box">
+      <p>You are not logged in, this is not going to work!.</p>
+    </div>
+  </div>
+</div>
+
+<div class="container mt-5" *ngIf="idToken">
+  <div class="row">
+    <div class="border-box">
+      <p>You are about to configure SMS password reset.</p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="usrinput-box">
+      <button mat-stroked-button (click)="initiateSmsEnrol()" color="primary" >Continue</button>
+    </div>
+  </div>
+</div>

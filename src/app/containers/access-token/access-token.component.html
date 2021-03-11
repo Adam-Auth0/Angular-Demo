@@ -1,0 +1,200 @@
+<div class="container mt-5" *ngIf="!token">
+    <div class="row">
+        <div class="border-box">
+        <form>
+            <p>Select the required company, followed by profile and then click "Get Access Token"</p>
+            <div>
+            <mat-form-field>
+                <mat-label>Company</mat-label>
+                <mat-select [(ngModel)]="selectedCompany" name="company" (selectionChange)="companyChange(selectedCompany)">
+                    <mat-option *ngFor="let company of companies" [value]="company.name">
+                        {{ company.description }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            </div>
+            <div>
+            <mat-form-field>
+                <mat-label>Profile</mat-label>
+                <mat-select [(ngModel)]="selectedProfile" [disabled]="selectedCompany===undefined" name="profile">
+                    <mat-option *ngFor="let profile of activeProfiles" [value]="profile.name">
+                        {{ profile.description }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            </div>
+        </form>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="usrinput-box">
+            <button mat-stroked-button (click)="initiateGetToken()" color="primary" [disabled]="selectedProfile===undefined || selectedProfile===''">Get Access Token</button>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-5" *ngIf="token">
+    <div class="row">
+        <div class="border-box">
+            <p> Company: {{ selectedCompany }} </p>
+            <p> Profile: {{ selectedProfile }} </p>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-5" *ngIf="token">
+
+   <div class="row">
+        <div class="usrinput-box">
+            <mat-slide-toggle [color]="primary" [formControl]="showtokenControl">Show Raw Token</mat-slide-toggle>
+            <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            <mat-slide-toggle [color]="primary" [formControl]="showvalidationControl">Show Validation</mat-slide-toggle>
+            <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            <mat-slide-toggle [color]="primary" [formControl]="showjsonControl">Show Decoded Token (JSON)</mat-slide-toggle>
+            <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            <mat-slide-toggle [color]="primary" [formControl]="showclaimsControl">Show Token Claims</mat-slide-toggle>
+        </div>
+    </div>
+
+    <div class="row" *ngIf="showtokenControl.value">
+        <code class="jwt-box">
+            <span class="jwt-header">{{ jwtPart[0] }}</span>
+            <span class="jwt-dot">.</span>
+            <span class="jwt-payload">{{ jwtPart[1] }}</span>
+            <span class="jwt-dot">.</span>
+            <span class="jwt-signature">{{ jwtPart[2] }}</span>
+        </code>
+    </div>
+
+    <div class="row" *ngIf="showvalidationControl.value">
+      <code class="jwt-box">
+        <span class="tokenvalidtext">Token Valid: </span>
+        <span *ngIf="expTime$ | async as exptime">
+          <span *ngIf="exptime.isTimeLeft else elseBlock" class="tokenvalid">Yes (Expires in: {{exptime.days}} days, {{exptime.hours}} hours, {{exptime.minutes}} minutes, {{exptime.seconds}} seconds)</span>
+          <ng-template #elseBlock><span class="tokenexpired">No</span></ng-template>
+        </span>
+      </code>
+    </div>
+
+    <div class="row" *ngIf="showjsonControl.value">
+        <code class="jwt-box">
+            <pre class="json">{{ tokenJson }}</pre>
+        </code>
+    </div>
+
+
+    <div class="row" *ngIf="showclaimsControl.value">
+      <code class="jwt-box">
+        <div class="standardClaimsHeader">Standard Claims</div>
+        <hr>
+        <table mdbTable>
+          <thead>
+            <tr>
+              <th *ngFor="let head of headElementsStandard" scope="col">{{head}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr mdbTableCo>
+              <td>iss</td>
+              <td>Issuer</td>
+              <td>{{ tokenClaims.iss }}</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr mdbTableCo>
+              <td>sub</td>
+              <td>Subject</td>
+              <td>{{ tokenClaims.sub }}</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr *ngFor="let audience of tokenClaims.aud; let i = index" mdbTableCo>
+              <td *ngIf="i==0"><span>aud</span></td>
+              <td *ngIf="i!=0">&nbsp;</td>
+              <td *ngIf="i==0">Audience</td>
+              <td *ngIf="i!=0">&nbsp;</td>
+              <td>[{{ i+1 }}] {{ audience }}</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr mdbTableCo>
+              <td>iat</td>
+              <td>Issued At</td>
+              <td>{{ tokenClaims.iat }}</td>
+              <td>{{ tokenClaims.iat * 1000 | date:'EEE MMM dd yyyy HH:mm:ss zzzz' }}</td>
+            </tr>
+            <tr mdbTableCo>
+              <td>exp</td>
+              <td>Expiration</td>
+              <td>{{ tokenClaims.exp }}</td>
+              <td>{{ tokenClaims.exp * 1000 | date:'EEE MMM dd yyyy HH:mm:ss zzzz' }}</td>
+            </tr>
+            <tr mdbTableCo>
+              <td>azp</td>
+              <td>Authorised Party</td>
+              <td>{{ tokenClaims.azp }}</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr mdbTableCo>
+              <td>scope</td>
+              <td>Scope(s)</td>
+              <td>{{ tokenClaims.scope }}</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr *ngFor="let permission of tokenClaims.permissions; let i = index" mdbTableCo>
+              <td *ngIf="i==0"><span>permissions</span></td>
+              <td *ngIf="i!=0">&nbsp;</td>
+              <td *ngIf="i==0">Access Permissions</td>
+              <td *ngIf="i!=0">&nbsp;</td>
+              <td>[{{ i+1 }}] {{ permission }}</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr mdbTableCo>
+              <td>org_id</td>
+              <td>Organization ID</td>
+              <td>{{ tokenClaims.org_id }}</td>
+              <td>&nbsp;</td>
+            </tr>
+
+          </tbody>
+        </table>
+        <hr>
+ 
+        <div *ngIf="customClaims.length > 0">
+          <div class="customClaimsHeader">Custom Claims</div>
+          <hr>
+          <table mdbTable>
+            <thead>
+              <tr>
+                <th *ngFor="let head of headElementsCustom" scope="col">{{head}}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let claim of customClaims" mdbTableCo>
+                <td>{{ claim }}</td>
+                <td class="tdcustomclaimvalue">{{ tokenClaims[claim] }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <hr>
+        </div>
+      </code>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>

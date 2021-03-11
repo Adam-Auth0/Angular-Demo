@@ -1,0 +1,8 @@
+{
+  "clientId": "GnJsXrDYhuh0X7Mh7vYPvGqJ7ohhjviO",
+  "passwordlessClientId": "c1P1EjaAk6IuHkpCEhDyrpv03CWsYTex",
+  "domain": "auth.evansdemo.co.uk",
+  "audience": "https://inspoadam.eu.auth0.com/api/v2/",
+  "apiUri": "http://localhost:3001",
+  "appUri": "https://app.acmecorp.com:3000"
+}

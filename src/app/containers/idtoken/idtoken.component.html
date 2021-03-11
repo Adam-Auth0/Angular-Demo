@@ -1,0 +1,215 @@
+<div class="container mt-5" *ngIf="profile">
+  <div
+    class="row align-items-center profile-header mb-5 text-center text-md-left"
+  >
+    <div class="col-md-2">
+      <img
+        [src]="profile.picture"
+        class="rounded-circle img-fluid profile-picture mb-3 mb-md-0"
+      />
+    </div>
+    <div class="col-md">
+      <h2>{{ profile.name }}</h2>
+      <p class="lead text-muted">{{ profile.email }}</p>
+    </div>
+  </div>
+
+  <div class="container mt-5" *ngIf="idToken">
+    <div class="row">
+        <div class="usrinput-box">
+            <mat-slide-toggle [color]="primary" [formControl]="showtokenControl">Show Raw Token</mat-slide-toggle>
+            <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            <mat-slide-toggle [color]="primary" [formControl]="showvalidationControl">Show Validation</mat-slide-toggle>
+            <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            <mat-slide-toggle [color]="primary" [formControl]="showjsonControl">Show Decoded Token (JSON)</mat-slide-toggle>
+            <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            <mat-slide-toggle [color]="primary" [formControl]="showclaimsControl">Show Token Claims</mat-slide-toggle>
+        </div>
+    </div>
+
+    <div class="row" *ngIf="showtokenControl.value">
+      <code class="jwt-box">
+        <span class="jwt-header">{{ jwtPart[0] }}</span>
+        <span class="jwt-dot">.</span>
+        <span class="jwt-payload">{{ jwtPart[1] }}</span>
+        <span class="jwt-dot">.</span>
+        <span class="jwt-signature">{{ jwtPart[2] }}</span>
+      </code>
+    </div>
+
+    <div class="row" *ngIf="showvalidationControl.value">
+      <code class="jwt-box">
+        <span class="tokenvalidtext">Token Valid: </span>
+        <span *ngIf="expTime$ | async as exptime">
+          <span *ngIf="exptime.isTimeLeft else elseBlock" class="tokenvalid">Yes (Expires in: {{exptime.days}} days, {{exptime.hours}} hours, {{exptime.minutes}} minutes, {{exptime.seconds}} seconds)</span>
+          <ng-template #elseBlock><span class="tokenexpired">No</span></ng-template>
+        </span>
+      </code>
+    </div>
+
+    <div class="row" *ngIf="showjsonControl.value">
+        <code class="jwt-box">
+            <pre class="json">{{ idTokenJson }}</pre>
+        </code>
+    </div>
+
+    <div class="row" *ngIf="showclaimsControl.value">
+      <code class="jwt-box">
+        <div class="standardClaimsHeader">Standard Claims</div>
+        <hr>
+        <table mdbTable>
+          <thead>
+            <tr>
+              <th *ngFor="let head of headElementsStandard" scope="col">{{head}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr mdbTableCo>
+              <td>nickname</td>
+              <td>Nickname</td>
+              <td>{{ idTokenClaims.nickname }}</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr mdbTableCo>
+              <td>name</td>
+              <td>Full Name</td>
+              <td>{{ idTokenClaims.name }}</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr *ngIf="idTokenClaims.given_name" mdbTableCo>
+              <td>given_name</td>
+              <td>Given Name</td>
+              <td>{{ idTokenClaims.given_name }}</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr *ngIf="idTokenClaims.family_name" mdbTableCo>
+              <td>last_name</td>
+              <td>Last Name</td>
+              <td>{{ idTokenClaims.family_name }}</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr mdbTableCo>
+              <td>picture</td>
+              <td>Picture</td>
+              <td>{{ idTokenClaims.picture }}</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr mdbTableCo>
+              <td>updated_at</td>
+              <td>Updated At</td>
+              <td>{{ idTokenClaims.updated_at }}</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr mdbTableCo>
+              <td>email</td>
+              <td>Email Address</td>
+              <td>{{ idTokenClaims.email }}</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr mdbTableCo>
+              <td>email_verified</td>
+              <td>Email Verified</td>
+              <td>{{ idTokenClaims.email_verified }}</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr *ngIf="idTokenClaims.locale" mdbTableCo>
+              <td>locale</td>
+              <td>Locale</td>
+              <td>{{ idTokenClaims.locale }}</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr mdbTableCo>
+              <td>iss</td>
+              <td>Issuer</td>
+              <td>{{ idTokenClaims.iss }}</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr mdbTableCo>
+              <td>sub</td>
+              <td>Subject</td>
+              <td>{{ idTokenClaims.sub }}</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr mdbTableCo>
+              <td>aud</td>
+              <td>Audience (Client)</td>
+              <td>{{ idTokenClaims.aud }}</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr mdbTableCo>
+              <td>iat</td>
+              <td>Issued At</td>
+              <td>{{ idTokenClaims.iat }}</td>
+              <td>{{ idTokenClaims.iat * 1000 | date:'EEE MMM dd yyyy HH:mm:ss zzzz' }}</td>
+            </tr>
+            <tr mdbTableCo>
+              <td>exp</td>
+              <td>Expiry</td>
+              <td>{{ idTokenClaims.exp }}</td>
+              <td>{{ idTokenClaims.exp * 1000 | date:'EEE MMM dd yyyy HH:mm:ss zzzz' }}</td>
+            </tr>
+            <tr mdbTableCo>
+              <td>nonce</td>
+              <td>Nonce</td>
+              <td>{{ idTokenClaims.nonce }}</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr mdbTableCo>
+              <td>org_id</td>
+              <td>Organization ID</td>
+              <td>{{ idTokenClaims.org_id }}</td>
+              <td>&nbsp;</td>
+            </tr>
+          </tbody>
+        </table>
+        <hr>
+
+        <div *ngIf="idTokenClaims.acr || idTokenClaims.amr">
+          <div class="mfaClaimsHeader" >Multi-Factor Authentication Claims</div>
+          <hr>
+          <table mdbTable>
+            <thead>
+              <tr>
+                <th *ngFor="let head of headElementsMfa" scope="col">{{head}}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr mdbTableCo>
+                <td>acr</td>
+                <td>Authentication Context Class Reference</td>
+                <td>{{ idTokenClaims.acr }}</td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr mdbTableCo>
+                <td>amr</td>
+                <td>Authentication Methods References</td>
+                <td>{{ idTokenClaims.amr }}</td>
+                <td>&nbsp;</td>
+              </tr>
+            </tbody>
+          </table>
+          <hr>
+        </div>
+
+        <div *ngIf="customClaims.length > 0">
+          <div class="customClaimsHeader">Custom Claims</div>
+          <hr>
+          <table mdbTable>
+            <thead>
+              <tr>
+                <th *ngFor="let head of headElementsCustom" scope="col">{{head}}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let claim of customClaims" mdbTableCo>
+                <td>{{ claim }}</td>
+                <td class="tdcustomclaimvalue">{{ idTokenClaims[claim] }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <hr>
+        </div>
+      </code>
+    </div>
+  </div>
+</div>

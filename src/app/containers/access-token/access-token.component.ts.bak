@@ -1,0 +1,53 @@
+import { Component, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { JwtHelperService } from '@auth0/angular-jwt';
+import { AuthService } from '../../auth/auth.service';
+
+
+@Component({
+  selector: 'app-access-token',
+  templateUrl: './access-token.component.html',
+  styleUrls: ['./access-token.component.css']
+})
+export class AccessTokenComponent implements OnInit {
+    companyControl = new FormControl('');
+    public show = false;
+    public buttonName: any = 'Show';
+    token2: any;
+    // token2Claims: AccessTokenClaims;
+    token2Json: any;
+    headElements = ['Claim', 'Value'];
+
+    constructor(private authService: AuthService) { }
+
+    async ngOnInit(): Promise<any> {
+        const client = await this.authService.getAuth0Client();
+        const token2 = await client.getTokenWithPopup({ audience: 'https://devapi.mansyscloud.net/api/', scope: 'profileTwo:companyA' });
+        const jwtHelper = new JwtHelperService();
+
+        if (token2) {
+            this.token2 = token2;
+            // this.token2Claims = jwtHelper.decodeToken(token2);
+            this.token2Json = JSON.stringify(jwtHelper.decodeToken(token2), null, 2);
+        }
+
+        if (this.token2) {
+            return;
+        }
+
+
+        this.token2 = null;
+        this.token2Json = null;
+    }
+
+    toggle() {
+        this.show = !this.show;
+
+        // CHANGE THE NAME OF THE BUTTON.
+        if (this.show) {
+            this.buttonName = 'Hide JSON';
+        } else {
+            this.buttonName = 'Show JSON';
+        }
+    }
+}

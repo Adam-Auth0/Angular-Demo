@@ -1,0 +1,9 @@
+{
+  "clientId": "0nXB3iqmLY0I0SITFyBBX4zqIS4D8se2",
+  "passwordlessClientId": "c1P1EjaAk6IuHkpCEhDyrpv03CWsYTex",
+  "domain": "auth.evansdemo.co.uk",
+  "audience": "https://inspoadam.eu.auth0.com/api/v2/",
+  "scope": "openid profile email address phone read:current_user update:current_user_metadata delete:current_user_metadata create:current_user_metadata create:current_user_device_credentials delete:current_user_device_credentials update:current_user_identities",
+  "apiUri": "http://localhost:3001",
+  "appUri": "https://app.acmecorp.com:3000"
+}

@@ -1,0 +1,5 @@
+{
+  "globalDependencies": {
+    "auth0.service": "file:./typings/source/auth0.service.d.ts"
+  }
+}
